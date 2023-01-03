@@ -60,14 +60,16 @@ Route::post("news/{news_id}", [NewsController::class, "updateNews"]);
 Route::delete("news/{news_id}", [NewsController::class, "delete"]);
 
 Route::get("/sub_topics", [SubTopicController::class, "index"]);
-Route::get("/sub_topics{sub_topic_slug}", [SubTopicController::class, "show"]);
+Route::get("/sub_topics/{sub_topic_slug}", [SubTopicController::class, "show"]);
 Route::post("/sub_topics", [SubTopicController::class, "store"]);
-Route::post("/sub_topics/{id}", [SubTopicController::class, "update"]);
+Route::put("/sub_topics/{id}", [SubTopicController::class, "update"]);
 Route::delete("/sub_topics/{id}", [SubTopicController::class, "delete"]);
+
 Route::get("/topics", [TopicController::class, "index"]);
 Route::get("/topics/{topic_slug}", [TopicController::class, "show"]);
 Route::post("/topics", [TopicController::class, "save"]);
 Route::post("/topics/{id}", [TopicController::class, "update"]);
+
 Route::delete("/topics/{id}", [TopicController::class, "delete"]);
 Route::get("/history/{id?}", [HistoryController::class, "index"]);
 Route::post("/history", [HistoryController::class, "store"]);

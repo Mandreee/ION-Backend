@@ -33,7 +33,7 @@ class SubTopicController extends Controller
 
     /**
      * @param \Illuminate\Http\Request @request
-     * @return \Illuminate\Http\Response 
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request): JsonResponse
     {
@@ -71,8 +71,8 @@ class SubTopicController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request @request 
-     *@return \Illuminate\Http\Response 
+     * @param \Illuminate\Http\Request @request
+     *@return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
@@ -97,21 +97,19 @@ class SubTopicController extends Controller
             $response = response()->json(["status" => "Fail", "status_code" => 422, "message" => $validator->errors()], 422);
         } else {
             if ($this->SubTopicWithCondition("id", $id) != null) {
-                $json_encode = json_encode(SubTopics::where("id", $id)->select("id", "sub_topic_title")->get());
-                $json_decode_id =  json_decode($json_encode)[0]->id;
-                $json_decode_sub_topic_title =  json_decode($json_encode)[0]->sub_topic_title;
-                if ($id == $json_decode_id && $sub_topic_title_capitalize == $json_decode_sub_topic_title) {
-                    $sub_topic_update->update($array_update);
+                $sub_topic = SubTopics::find($id);
+                if ($id == $sub_topic->id) {
+                    $sub_topic->fill($array_update);
+                    $sub_topic->save();
                     $response = response()->json(["sub_topics" => $array_update, "status" => "Success", "status_code" => 200, "message" => "Successfully update sub topic"], 200);
-                } else if ($id == $json_decode_sub_topic_title && $this->SubTopicWithCondition("sub_topic_title", $sub_topic_title_capitalize)->get() != null) {
+                } else {
                     $response =  response()->json(["sub_topics" => $array_update, "status" => "Failed", "status_code" => 409, "message" => "Sub topic can not be updated"], 409);
                 }
             } else {
-                $sub_topic_update->update($array_update);
+                $sub_topic_update->save($array_update);
                 $response = response()->json(["sub_topics" => $sub_topic_update, "status" => "Success", "status_code" => 200, "message" => "Successfully update sub topic"], 200);
             }
         }
-
         return $response;
     }
 
