@@ -164,10 +164,13 @@ class UserController extends Controller
     {
         try {
             $author = User::find($id);
+            if ($author == null){
+                return response()->json('Data User Tidak Ditemukan', 404);
+            }
             $author->delete();
             return response()->json('Data User Berhasil Dihapus', 200);
         }catch (\Exception $exception){
-            return response()->json('Data User Tidak Ditemukan', 404);
+                return response()->json('Data User Tidak Ditemukan', 404);
         }
     }
 
