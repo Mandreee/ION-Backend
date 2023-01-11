@@ -61,7 +61,7 @@ class NewsController extends Controller
     }
     public function searchNewsByNewsTitle($keywordparam)
     {
-        $news = News::join("users", "users.id", "=", "news.user")->where("news_content", "like", str_replace("%", "", $keywordparam))->get();
+        $news = News::join("users", "users.id", "=", "news.user_id")->where('news_content', 'like', '%' .$keywordparam . '%')->get();
         return response()->json($news);
     }
 

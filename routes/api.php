@@ -58,7 +58,7 @@ Route::get("news/topics/sub_topics/{sub_topic_slug}", [NewsController::class, "s
 Route::get("news/open_news/{news_slug}", [NewsController::class, "readingNews"]);
 Route::get("news/user/{id}", [NewsController::class, "showNewsByUserId"]);
 Route::get("news", [NewsController::class, "index"]);
-Route::get("news/update/{id}", [NewsController::class, "detail"]); // goblok
+Route::get("news/update/{id}", [NewsController::class, "detail"]);
 Route::get("/news/exists_or_not/{user_id}", [NewsController::class, "checkNewsExist"]);
 Route::get("news/openpicture/{news_id}", [NewsController::class, "openNewsPicture"]); //Take blob
 Route::get("news/search_news/{keywordparam}", [NewsController::class, "searchNewsByNewsTitle"]);
