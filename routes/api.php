@@ -50,7 +50,7 @@ Route::post('/login/user', [UserController::class, "loginUser"]);
 Route::post("user/register", [UserController::class, "register"]);
 Route::post('/registeradmin', [UserController::class, 'registerAdmin']);
 Route::get("/authors", [UserController::class, "showAllAuthors"]);
-Route::get("/deleteUser/{id}", [UserController::class, "deleteUser"]);
+Route::delete("/deleteUser/{id}", [UserController::class, "deleteUser"]);
 // News Routes
 Route::get("news/topics", [NewsController::class, "showNewsByTopics"]);
 Route::get("news/topics/{topic_slug}", [NewsController::class, "showNewsByOneTopic"]); //Show news by a topic
@@ -58,7 +58,7 @@ Route::get("news/topics/sub_topics/{sub_topic_slug}", [NewsController::class, "s
 Route::get("news/open_news/{news_slug}", [NewsController::class, "readingNews"]);
 Route::get("news/user/{id}", [NewsController::class, "showNewsByUserId"]);
 Route::get("news", [NewsController::class, "index"]);
-Route::get("news/update/{id}", [NewsController::class, "detail"]);
+Route::get("news/update/{id}", [NewsController::class, "detail"]); // goblok
 Route::get("/news/exists_or_not/{user_id}", [NewsController::class, "checkNewsExist"]);
 Route::get("news/openpicture/{news_id}", [NewsController::class, "openNewsPicture"]); //Take blob
 Route::get("news/search_news/{keywordparam}", [NewsController::class, "searchNewsByNewsTitle"]);
