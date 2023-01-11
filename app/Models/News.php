@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class News extends Model
@@ -27,10 +28,16 @@ class News extends Model
         'updated_at',
         'news_status',
         'sub_topic_id',
-        'user_id'
+        'user_id',
     ];
+
     public function sub_topics()
     {
         return $this->belongsTo(NewsSubTopics::class);
+    }
+
+    public function user():BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

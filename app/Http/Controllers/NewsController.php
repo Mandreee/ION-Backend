@@ -159,7 +159,7 @@ class NewsController extends Controller
         // for ($i = 0; $i < count($distincts); $i++) {
         //     $arrayOfTopicIdsInSubTopics[$i] = $distincts[$i]->topic_id;
         // }
-        $news = Topics::with("news")->get();
+        $news = Topics::with("news.user")->get();
         // $news_test = News::join("sub_topics", "sub_topics.id", "=", "news.sub_topic_id")->whereIn("sub_topic_id", $arrayOfTopicIdsInSubTopics)->get();
         // $topicsByTopicId = Topics::whereIn("id", $arrayOfTopicIdsInSubTopics)->get();
         // $arrayOfNews = array("" => $topicsByTopicId, "news" => $news_test);
