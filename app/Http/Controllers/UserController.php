@@ -116,18 +116,19 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             "image_file" => "image:jpg,jpeg,png|max:5500"
         ]);
-        $user_name = $request->name;
-        $image_file = $request->file("image_file");
-        $author_description = $request->author_desc;
-        $file_name = $image_file->getClientOriginalName();
-        $file_info = pathinfo($file_name);
-        $base_name = $file_info["filename"];
-        $extension = $image_file->getClientOriginalExtension();
-        $count = 1;
-        $current_count_file = $base_name . "_" . $count . $extension;
         if ($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 404);
         } else {
+            $user_name = $request->name;
+            $image_file = $request->file("image_file");
+            $author_description = $request->author_desc;
+            $file_name = $image_file->getClientOriginalName();
+            $file_info = pathinfo($file_name);
+            $base_name = $file_info["filename"];
+            $extension = $image_file->getClientOriginalExtension();
+            $count = 1;
+            $current_count_file = $base_name . "_" . $count . $extension;
+
             if (File::exists($user->photo_profile_path . "/" . $user->photo_profile_name)) {
                 File::delete($user->photo_profile_path . "/" . $user->photo_profile_name);
             }
@@ -156,7 +157,7 @@ class UserController extends Controller
     }
     public function userProfile($id)
     {
-        $author = User::find(intval($id));
+        $author = User::find($id);
         $admin_approval = AdminApproval::where("user_id", $id)->first();
         return response()->json(["author" => [$author], "admin_approval" => $admin_approval], 202);
     }
