@@ -116,6 +116,7 @@ class UserController extends Controller
         if (!isset($request['image_file'])){
             $user->fill($request->all());
             $user->save();
+            return response()->json('Data User Berhasil diupdate', 200);
         }else{
             $validator = Validator::make($request->all(), [
                 "image_file" => "image:jpg,jpeg,png|max:5500"
