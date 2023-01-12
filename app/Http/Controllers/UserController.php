@@ -113,46 +113,51 @@ class UserController extends Controller
     public function updateUser(Request $request, int $user_id)
     {
         $user = User::find($user_id);
-        $validator = Validator::make($request->all(), [
-            "image_file" => "image:jpg,jpeg,png|max:5500"
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 404);
-        } else {
-            $user_name = $request->name;
-            $image_file = $request->file("image_file");
-            $author_description = $request->author_desc;
-            $file_name = $image_file->getClientOriginalName();
-            $file_info = pathinfo($file_name);
-            $base_name = $file_info["filename"];
-            $extension = $image_file->getClientOriginalExtension();
-            $count = 1;
-            $current_count_file = $base_name . "_" . $count . $extension;
+        if (!isset($request['image_file'])){
+            $user->fill($request->all());
+            $user->save();
+        }else{
+            $validator = Validator::make($request->all(), [
+                "image_file" => "image:jpg,jpeg,png|max:5500"
+            ]);
+            if ($validator->fails()) {
+                return response()->json($validator->errors()->toJson(), 404);
+            } else {
+                $user_name = $request->name;
+                $image_file = $request->file("image_file");
+                $author_description = $request->author_desc;
+                $file_name = $image_file->getClientOriginalName();
+                $file_info = pathinfo($file_name);
+                $base_name = $file_info["filename"];
+                $extension = $image_file->getClientOriginalExtension();
+                $count = 1;
+                $current_count_file = $base_name . "_" . $count . $extension;
 
-            if (File::exists($user->photo_profile_path . "/" . $user->photo_profile_name)) {
-                File::delete($user->photo_profile_path . "/" . $user->photo_profile_name);
-            }
-            if (File::exists($user->photo_profile_path . "/" . $file_name)) {
-                if (File::exists($user->photo_profile_name . "/" . $current_count_file)) {
-                    do {
-                        $next_count_file = $base_name . "_" . $count . $extension;
-                        $current_count_file = $next_count_file;
-                        $count++;
-                    } while (File::exists($user->photo_profile_path . "/" . $current_count_file));
-                    $file_name = $current_count_file;
-                } else {
-                    $file_name = $current_count_file;
+                if (File::exists($user->photo_profile_path . "/" . $user->photo_profile_name)) {
+                    File::delete($user->photo_profile_path . "/" . $user->photo_profile_name);
                 }
+                if (File::exists($user->photo_profile_path . "/" . $file_name)) {
+                    if (File::exists($user->photo_profile_name . "/" . $current_count_file)) {
+                        do {
+                            $next_count_file = $base_name . "_" . $count . $extension;
+                            $current_count_file = $next_count_file;
+                            $count++;
+                        } while (File::exists($user->photo_profile_path . "/" . $current_count_file));
+                        $file_name = $current_count_file;
+                    } else {
+                        $file_name = $current_count_file;
+                    }
+                }
+                File::copy($image_file, $user->photo_profile_path . "/" . $file_name);
+                $data = array(
+                    "name" => $user_name,
+                    "author_description" => $author_description,
+                    "photo_profile_link" => $request->schemeAndHttpHost() . "/" . $user->photo_profile_path . "/" . $file_name,
+                    "photo_profile_name" => $file_name,
+                    "photo_profile_path" => "storage/photo_profile",
+                );
+                $user->update($data);
             }
-            File::copy($image_file, $user->photo_profile_path . "/" . $file_name);
-            $data = array(
-                "name" => $user_name,
-                "author_description" => $author_description,
-                "photo_profile_link" => $request->schemeAndHttpHost() . "/" . $user->photo_profile_path . "/" . $file_name,
-                "photo_profile_name" => $file_name,
-                "photo_profile_path" => "storage/photo_profile",
-            );
-            $user->update($data);
         }
     }
     public function userProfile($id)
